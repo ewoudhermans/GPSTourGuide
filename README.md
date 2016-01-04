@@ -1,5 +1,6 @@
 # GPSTourGuide
 
+Ewoud Hermans
 
 Solved problem for the user
 
