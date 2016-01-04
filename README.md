@@ -14,11 +14,14 @@ Features
 
 -	Takes your location into account (uses GPS)
 -	Gives you notifications about sights corresponding to your location
+-   Users can see nearby sights on a map
 -	User can add information to a database, and the information is linked to a GPS location
 -	As user you can rate the information provided by other users (thumbs up/ down)
 -	When information has to many bad ratings it is automatically removed
 -	User can (or has) to make an account
 -	Once logged in user does not have to keep logging in when app is closed
+-   User can add sight to his favorites
+-   User can search for sites by name
 
 Databases
 
