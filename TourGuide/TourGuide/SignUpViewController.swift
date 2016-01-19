@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Parse
+import Bolts
 
 class SignUpViewController: UIViewController, UITextFieldDelegate, UIAlertViewDelegate {
 
@@ -17,14 +19,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     @IBOutlet weak var userPassword: UITextField!
     @IBOutlet weak var confirmPassword: UITextField!
     @IBOutlet weak var errorSignUpLabel: UILabel!
-    
-    
-    
-    
-    
-    
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,15 +36,27 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         
         let signup = SignUp(fName: firstName.text!, lName: lastName.text!, uName: userName.text!, uEmail: userEmail.text!, uPassword: userPassword.text!, cPassword: confirmPassword.text!)
         
-        do {
-            try signup.signUpUser()
-            let alert = succesfullSignUp()
-            presentViewController(alert, animated: true, completion: nil)
-        } catch let error as Error{
-            errorSignUpLabel.text = error.description
-        } catch {
-            errorSignUpLabel.text = "Sorry, something went wrong, please try again"
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+            do {
+                try signup.checkRequirements()
+                
+                signup.storeNewUser({ (result, succes) -> Void in
+                    if succes {
+                        let alert = self.succesfullSignUp()
+                        self.presentViewController(alert, animated: true, completion: nil)
+                    }
+                })
+                
+            } catch let error as Error {
+                dispatch_async(dispatch_get_main_queue()) {self.errorSignUpLabel.text = error.description}
+            } catch {
+                dispatch_async(dispatch_get_main_queue()) { self.errorSignUpLabel.text = "Sorry, something went wrong, please try again" }
+            }
         }
+        
+        
+        
+        
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {

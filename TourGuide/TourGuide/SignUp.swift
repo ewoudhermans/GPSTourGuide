@@ -29,46 +29,29 @@ class SignUp: NSObject {
         self.confirmPassword = cPassword
     }
     
-    func signUpUser()throws -> Bool {
-        guard hasEmptyFields() else {
+    func checkRequirements() throws {
+        if firstName!.isEmpty && lastName!.isEmpty && userName!.isEmpty && userEmail!.isEmpty && userPassword!.isEmpty && confirmPassword!.isEmpty {
             throw Error.EmptyField
         }
-        guard isValidEmail() else {
-            throw Error.InvalidEmail
-        }
-        guard validatePasswordMatch() else {
-            throw Error.PasswordsDoNotMatch
-        }
-        guard storeNewUser() else {
-            throw Error.UserNameTaken
-        }
-        return true
-    }
-    
-    func hasEmptyFields() -> Bool {
-        if !firstName!.isEmpty && !lastName!.isEmpty && !userName!.isEmpty && !userEmail!.isEmpty && !userPassword!.isEmpty && !confirmPassword!.isEmpty {
-            return true
-        }
-        return false
-    }
-    
-    func isValidEmail() -> Bool {
-        let email = "[A-Z0-9a-z.+_-%]+@[A-Z0-9a-z.+_-%]+\\.[A-Za-z]"
+        
+        let email = "[A-Z0-9a-z+-._%]+@[A-Za-z]+\\.[A-Za-z]{2-4}"
         let range = userEmail!.rangeOfString(email, options: .RegularExpressionSearch)
         let result = range != nil ? true : false
-        return result
-    }
-    
-    func validatePasswordMatch() -> Bool {
-        if(userPassword! == confirmPassword!) {
-            return true
+        if result == true {
+            throw Error.InvalidEmail
         }
-        return false
+        
+        if (userPassword! != confirmPassword!) {
+            throw Error.PasswordsDoNotMatch
+        }
+        
+        
     }
     
-    func storeNewUser() -> Bool {
+    
+    func storeNewUser(completion:(result: PFUser?, succes: Bool) -> Void) {
         
-        var success = false
+        
         let user = PFUser()
         
         user["Firstname"] = firstName!
@@ -77,12 +60,21 @@ class SignUp: NSObject {
         user.email = userEmail!
         user.password = userPassword!
         
-        user.signUpInBackground()
-        success = user.isNew
-        return success
+//        user.signUpInBackgroundWithBlock {
+//            (var success: Bool, error: NSError?) -> Void in
+//            if error == nil {
+//                success = true
+//            } else {
+//                print ("error")
+//            }
+//        }
+        
+        user.signUpInBackgroundWithBlock({(success: Bool, error: NSError?) -> Void in
+            if success {
+                completion(result: PFUser.currentUser()!, succes: true)
+            } else {
+                completion(result: nil, succes: false)
+            }
+        })
     }
-    
-    
-    
-    
 }

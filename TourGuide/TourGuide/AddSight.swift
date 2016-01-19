@@ -14,32 +14,51 @@ import Bolts
 
 class AddSight: NSObject {
     
-    var sightLocation: CLLocation
     var sightInfo: String = ""
-    var sightPhoto: UIImage
+    var sightTitle: String = ""
+    var sightPhoto: UIImageView
+    var sightLatitude: CLLocationDegrees
+    var sightLongitude: CLLocationDegrees
+    var sightCity: String = ""
+    var sightGeopoint = PFGeoPoint()
     
-    init(sLocation: CLLocation, sInfo: String, sPhoto: UIImage) {
-        self.sightLocation = sLocation
+    init(sInfo: String, sTitle: String, sPhoto: UIImageView, sLatitude: CLLocationDegrees, sLongitude: CLLocationDegrees, sCity: String, sGeopoint: PFGeoPoint) {
         self.sightInfo = sInfo
+        self.sightTitle = sTitle
         self.sightPhoto = sPhoto
+        self.sightLatitude = sLatitude
+        self.sightLongitude = sLongitude
+        self.sightCity = sCity
+        self.sightGeopoint = sGeopoint
+        
     }
     
-    func addSight() {
-        var addedSight = PFObject(className: "AddedSight")
-        addedSight["SightLocation"] = sightLocation
+    func addSight(completion:(succes: Bool) -> Void) {
+        let addedSight = PFObject(className: "AddedSight")
+        
+        addedSight["SightLatitude"] = sightLatitude
+        addedSight["SightLongitude"] = sightLongitude
+        addedSight["Geopoints"] = sightGeopoint
         addedSight["SightInfo"] = sightInfo
-        addedSight["SightPhoto"] = sightPhoto
+        addedSight["SightTitle"] = sightTitle
+        addedSight["SightCity"] = sightCity
+        
+        
+        let parseImageFile = PFFile(data: UIImageJPEGRepresentation(sightPhoto.image!, 0.1)!)
+        addedSight["imageFile"] = parseImageFile
+        
         addedSight.saveInBackgroundWithBlock({
             (success: Bool, error: NSError?) -> Void in
             
             if error == nil {
-                
-                //var imageData = UIImagePNGRepresentation(self.sightPhoto.image)
-                //var parseImageFile = PFFile(name: "uploaded_image.png", contentsAtPath: imageData)
-                
+                print ("Data uploaded")
+                completion(succes: true)
             } else {
                 print (error)
+                completion(succes: false)
             }
         })
     }
 }
+
+

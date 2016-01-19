@@ -28,6 +28,22 @@ class SignInViewController: UIViewController {
     }
 
     @IBAction func signInTouched(sender: AnyObject) {
+        let signin = SignIn(user: userName.text!, pass: userPassword.text!)
+        
+        do {
+            // call signIn model function SignInUser()
+            // anything under this try will execute if signInUser returns true
+            try signin.signInUser()
+            
+            // dismiss view controller and go to MainViewController
+            self.dismissViewControllerAnimated(true, completion: nil)
+            
+            // catches error thrown by SignInUser() if there is one
+        } catch let error as Error {
+            print(error.description)
+        } catch {
+            print("Sorry something went\n wrong please try again")
+        }
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {

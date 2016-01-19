@@ -23,6 +23,9 @@
 		72103A5F1C455F8B0074C82E /* AddSight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72103A5E1C455F8B0074C82E /* AddSight.swift */; };
 		72103A611C4574CB0074C82E /* AddSightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72103A601C4574CB0074C82E /* AddSightViewController.swift */; };
 		72103A671C463FCA0074C82E /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72103A661C463FCA0074C82E /* Error.swift */; };
+		72103A691C4916820074C82E /* SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72103A681C4916820074C82E /* SignIn.swift */; };
+		725050561C4BFD0300C99C50 /* Annotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725050551C4BFD0300C99C50 /* Annotations.swift */; };
+		7250505A1C4CF2FF00C99C50 /* GetSights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725050591C4CF2FF00C99C50 /* GetSights.swift */; };
 		729B27241C452167007BE28C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729B27231C452167007BE28C /* AppDelegate.swift */; };
 		729B27261C452167007BE28C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729B27251C452167007BE28C /* MainViewController.swift */; };
 		729B27291C452167007BE28C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 729B27271C452167007BE28C /* Main.storyboard */; };
@@ -68,6 +71,9 @@
 		72103A5E1C455F8B0074C82E /* AddSight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSight.swift; sourceTree = "<group>"; };
 		72103A601C4574CB0074C82E /* AddSightViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSightViewController.swift; sourceTree = "<group>"; };
 		72103A661C463FCA0074C82E /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		72103A681C4916820074C82E /* SignIn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignIn.swift; sourceTree = "<group>"; };
+		725050551C4BFD0300C99C50 /* Annotations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Annotations.swift; sourceTree = "<group>"; };
+		725050591C4CF2FF00C99C50 /* GetSights.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetSights.swift; sourceTree = "<group>"; };
 		729B27201C452167007BE28C /* TourGuide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TourGuide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		729B27231C452167007BE28C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		729B27251C452167007BE28C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -158,6 +164,9 @@
 				72103A5A1C454B0F0074C82E /* SignUp.swift */,
 				72103A5E1C455F8B0074C82E /* AddSight.swift */,
 				72103A661C463FCA0074C82E /* Error.swift */,
+				72103A681C4916820074C82E /* SignIn.swift */,
+				725050551C4BFD0300C99C50 /* Annotations.swift */,
+				725050591C4CF2FF00C99C50 /* GetSights.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -358,10 +367,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				72103A671C463FCA0074C82E /* Error.swift in Sources */,
+				72103A691C4916820074C82E /* SignIn.swift in Sources */,
+				725050561C4BFD0300C99C50 /* Annotations.swift in Sources */,
 				72103A611C4574CB0074C82E /* AddSightViewController.swift in Sources */,
 				729B27261C452167007BE28C /* MainViewController.swift in Sources */,
 				729B27241C452167007BE28C /* AppDelegate.swift in Sources */,
 				729B27541C4521E1007BE28C /* SignUpViewController.swift in Sources */,
+				7250505A1C4CF2FF00C99C50 /* GetSights.swift in Sources */,
 				729B27521C4521CE007BE28C /* SignInViewController.swift in Sources */,
 				72103A5B1C454B0F0074C82E /* SignUp.swift in Sources */,
 				72103A5F1C455F8B0074C82E /* AddSight.swift in Sources */,
@@ -506,6 +518,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -521,6 +534,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
