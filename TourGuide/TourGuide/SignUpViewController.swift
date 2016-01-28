@@ -19,9 +19,15 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
     @IBOutlet weak var userPassword: UITextField!
     @IBOutlet weak var confirmPassword: UITextField!
     @IBOutlet weak var errorSignUpLabel: UILabel!
+    @IBOutlet weak var signUpButton: UIButton!
+    @IBOutlet weak var alreadyUserButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        signUpButton.layer.cornerRadius = 8
+        alreadyUserButton.layer.cornerRadius = 8
+        
         firstName.delegate = self
         lastName.delegate = self
         userName.delegate = self
@@ -46,17 +52,12 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
                         self.presentViewController(alert, animated: true, completion: nil)
                     }
                 })
-                
             } catch let error as Error {
                 dispatch_async(dispatch_get_main_queue()) {self.errorSignUpLabel.text = error.description}
             } catch {
                 dispatch_async(dispatch_get_main_queue()) { self.errorSignUpLabel.text = "Sorry, something went wrong, please try again" }
             }
         }
-        
-        
-        
-        
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -69,10 +70,5 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         }))
         alertView.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         return alertView
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }

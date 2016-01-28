@@ -12,15 +12,21 @@ import CoreLocation
 import Parse
 import Bolts
 
-
 class MainViewController: UIViewController, CLLocationManagerDelegate {
 
     let userLocation = NSUserDefaults.standardUserDefaults()
+    let tabLocation = NSUserDefaults.standardUserDefaults()
+    let allSightInfo = NSUserDefaults.standardUserDefaults()
     var userGeoPoint = PFGeoPoint()
     var locationArray: [CLLocationDegrees] = [CLLocationDegrees]()
     var placesObjects = []
     var sighTitles = [String]()
     var sightLocations = []
+    var annotations = [MKAnnotation]()
+    var whenToUpdate: Bool = true
+    var locationManager: CLLocationManager!
+    var latitude = 0.0
+    var longitude = 0.0
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -30,29 +36,8 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     @IBAction func updateLocation(sender: AnyObject) {
-        //print (latitude)
-        //print (longitude)
-        
-//        let geoCoder = CLGeocoder()
-//        let location2 = CLLocation(latitude: latitude, longitude: longitude)
-//        
-//        geoCoder.reverseGeocodeLocation(location2, completionHandler: { (placemarks, error) -> Void in
-//            
-//            // Place details
-//            var placeMark: CLPlacemark!
-//            placeMark = placemarks?[0]
-        
-            self.centerMapOnLocation(self.location)
-
-            
-        //})
+        self.centerMapOnLocation(self.location)
     }
-    
-    var locationManager: CLLocationManager!
-    
-    var latitude = 0.0
-    var longitude = 0.0
-    //var locationArray = [CLLocationDegrees]()
     
     var location:CLLocation! {
         didSet {
@@ -61,21 +46,31 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        location = locations.last
+        findSight()
+        if whenToUpdate {
+            centerMapOnLocation(location)
+            whenToUpdate = false
+        }
+        
+    }
+    
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        mapView.showsUserLocation = (status == .AuthorizedAlways)
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        
+        whenToUpdate = true
         
         let currentUser = PFUser.currentUser()
         if currentUser != nil {
-            
+        
         } else {
             self.performSegueWithIdentifier("goSignIn", sender: self)
         }
-        
-        let initialLocation = CLLocation(latitude: 21.282778, longitude: -157.829444)
-        centerMapOnLocation(initialLocation)
-
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
@@ -92,23 +87,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
             print("Give authorization please")
         }
     }
-    
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        location = locations.last
-        
-        findSight()
-        
-//        for region in self.locationManager.monitoredRegions {
-//            self.locationManager.stopMonitoringForRegion(region)
-//        }
-        
-        centerMapOnLocation(location)
-    }
-    
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        mapView.showsUserLocation = (status == .AuthorizedAlways)
-    }
-    
+
     let regionRadius: CLLocationDistance = 1000
     func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
@@ -118,20 +97,33 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBAction func addSightButton(sender: AnyObject) {
         locationArray.removeAll()
-      
-        
         locationArray.append(location.coordinate.latitude)
         locationArray.append(location.coordinate.longitude)
         userLocation.setObject(locationArray, forKey: "myLocation")
     }
     
+    func containsAnnotation(annotation: MKAnnotation) -> Bool {
+        
+        if let existingAnnotations = self.annotations as? [MKAnnotation] {
+
+            for existingAnnotation in existingAnnotations {
+                if existingAnnotation.title! == annotation.title!
+                    && existingAnnotation.coordinate.latitude == annotation.coordinate.latitude
+                    && existingAnnotation.coordinate.longitude == annotation.coordinate.longitude {
+
+                        return true
+                }
+            }
+        }
+        return false
+    }
+    
     func findSight() {
         
         let query = PFQuery(className:"AddedSight")
-        // Interested in locations near user.
-        query.whereKey("Geopoints", nearGeoPoint: userGeoPoint)
-        // Limit what could be a lot of points.
-        query.limit = 10
+        userGeoPoint = PFGeoPoint(location: location)
+        //query.whereKey("Geopoints", nearGeoPoint: userGeoPoint)
+        query.limit = 50
         
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
@@ -145,57 +137,104 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
                     let sightLocation = CLLocationCoordinate2DMake(Lati, Longi)
                     self.sighTitles.append(Title)
                 
-                    let currRegion = CLCircularRegion(center: sightLocation, radius: 100, identifier: Title)
+                    let currRegion = CLCircularRegion(center: sightLocation, radius: 10, identifier: Title)
                     self.locationManager.startMonitoringForRegion(currRegion)
-                
-                    let annotation = Annotation(title: Title, coordinate: sightLocation)
-                    self.mapView.addAnnotation(annotation)
                     
+                    let annotation = Annotation(title: Title, coordinate: sightLocation)
+                    
+                        if !self.containsAnnotation(annotation) {
+                            
+                            self.annotations.append(annotation)
+                            self.mapView.addAnnotation(annotation)
+                        }
                 }
-               
-                
             } else {
                 print (error)
             }
         }
-        
-//        // Final list of objects
-//        do {
-//            placesObjects = try query.findObjects()
-//            for place in placesObjects {
-//                let Title = String(place["SightTitle"]!)
-//                let Lati = place["SightLongitude"] as! Double
-//                let Longi = place["SightLatitude"] as! Double
-//                let sightLocation = CLLocationCoordinate2DMake(Lati, Longi)
-//                sighTitles.append(Title)
-//                
-//                let currRegion = CLCircularRegion(center: sightLocation, radius: 100, identifier: Title)
-//                locationManager.startMonitoringForRegion(currRegion)
-//                
-//                let annotation = Annotation(title: Title, coordinate: sightLocation)
-//                mapView.addAnnotation(annotation)
-//            }
-//        } catch {
-//            print ("error", error)
-//        }
+    }
+    
+    func sightNotification(region: CLRegion) {
+        let Title = region.identifier
+        let query = PFQuery(className: "AddedSight")
+        query.whereKey("SightTitle", equalTo: Title)
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [PFObject]?, error: NSError?) -> Void in
+            
+            if error == nil {
+                let notification = UILocalNotification()
+                notification.alertAction = "You are near" + String(objects![0]["SightTitle"])
+                notification.alertBody = Title
+                
+                notification.fireDate = NSDate(timeIntervalSinceNow: 1)
+                
+                UIApplication.sharedApplication().scheduleLocalNotification(notification)
+                
+                let alertController = UIAlertController(title: Title, message: "Read up about " + Title, preferredStyle: .Alert)
+                let yesAction = UIAlertAction(title: "Read!", style: .Default) { (action) -> Void in
+                    self.performSegueWithIdentifier("sightReadInfo", sender: self)
+                }
+                
+                self.allSightInfo.setObject(Title, forKey: "sightTitle")
+                
+                let noAction = UIAlertAction(title: "No thanks", style: .Cancel, handler: nil)
+                alertController.addAction(yesAction)
+                alertController.addAction(noAction)
+                
+                self.presentViewController(alertController, animated: true, completion: nil)
+                
+            } else {
+                print (error)
+            }
+            
+        }
     }
     
     func locationManager(manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        sightNotification(region)
+        print (region.identifier)
+        print (region)
         NSLog("enteringregion")
     }
     
     func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
+        
         NSLog("exit")
     }
     
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         NSLog("\(error)")
     }
-
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func goSightTableView(sender: AnyObject) {
+        locationArray.removeAll()
+        
+        locationArray.append(location.coordinate.latitude)
+        locationArray.append(location.coordinate.longitude)
+        userLocation.setObject(locationArray, forKey: "myLocation")
     }
+    
+    @IBAction func addAnnotation(sender: UILongPressGestureRecognizer) {
+        let tabLocation = sender.locationInView(self.mapView)
+        let tabCoordinates = self.mapView.convertPoint(tabLocation, toCoordinateFromView: self.mapView)
+        let tabAnnotation = MKPointAnnotation()
+        tabAnnotation.coordinate = tabCoordinates
+        //self.mapView.addAnnotation(tabAnnotation)
+        
+        let alertController = UIAlertController(title: "Add new sight", message: "Are you sure you want to add a sight at this location?", preferredStyle: .Alert)
+        let yesAction = UIAlertAction(title: "Add!", style: .Default) { (action) -> Void in
+            
+            self.locationArray.append(tabCoordinates.latitude)
+            self.locationArray.append(tabCoordinates.longitude)
+            self.tabLocation.setObject(self.locationArray, forKey: "myTabLocation")
+            self.performSegueWithIdentifier("goAddTabSight", sender: self)
+        }
+        let noAction = UIAlertAction(title: "No thanks", style: .Cancel, handler: nil)
+        alertController.addAction(yesAction)
+        alertController.addAction(noAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
 }
 

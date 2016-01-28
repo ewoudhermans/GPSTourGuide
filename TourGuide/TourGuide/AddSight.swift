@@ -19,18 +19,15 @@ class AddSight: NSObject {
     var sightPhoto: UIImageView
     var sightLatitude: CLLocationDegrees
     var sightLongitude: CLLocationDegrees
-    var sightCity: String = ""
     var sightGeopoint = PFGeoPoint()
     
-    init(sInfo: String, sTitle: String, sPhoto: UIImageView, sLatitude: CLLocationDegrees, sLongitude: CLLocationDegrees, sCity: String, sGeopoint: PFGeoPoint) {
+    init(sInfo: String, sTitle: String, sPhoto: UIImageView, sLatitude: CLLocationDegrees, sLongitude: CLLocationDegrees, sGeopoint: PFGeoPoint) {
         self.sightInfo = sInfo
         self.sightTitle = sTitle
         self.sightPhoto = sPhoto
         self.sightLatitude = sLatitude
         self.sightLongitude = sLongitude
-        self.sightCity = sCity
         self.sightGeopoint = sGeopoint
-        
     }
     
     func addSight(completion:(succes: Bool) -> Void) {
@@ -41,8 +38,6 @@ class AddSight: NSObject {
         addedSight["Geopoints"] = sightGeopoint
         addedSight["SightInfo"] = sightInfo
         addedSight["SightTitle"] = sightTitle
-        addedSight["SightCity"] = sightCity
-        
         
         let parseImageFile = PFFile(data: UIImageJPEGRepresentation(sightPhoto.image!, 0.1)!)
         addedSight["imageFile"] = parseImageFile

@@ -24,8 +24,11 @@
 		72103A611C4574CB0074C82E /* AddSightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72103A601C4574CB0074C82E /* AddSightViewController.swift */; };
 		72103A671C463FCA0074C82E /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72103A661C463FCA0074C82E /* Error.swift */; };
 		72103A691C4916820074C82E /* SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72103A681C4916820074C82E /* SignIn.swift */; };
+		7217F05F1C56BB6B00FC2AAB /* SightTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217F05E1C56BB6B00FC2AAB /* SightTableTableViewController.swift */; };
+		7217F0611C57BD6B00FC2AAB /* SingleRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217F0601C57BD6B00FC2AAB /* SingleRowCell.swift */; };
+		7217F0631C580CB800FC2AAB /* AddSightByTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217F0621C580CB800FC2AAB /* AddSightByTabViewController.swift */; };
 		725050561C4BFD0300C99C50 /* Annotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725050551C4BFD0300C99C50 /* Annotations.swift */; };
-		7250505A1C4CF2FF00C99C50 /* GetSights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725050591C4CF2FF00C99C50 /* GetSights.swift */; };
+		7250505C1C4FEF2500C99C50 /* ViewSightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250505B1C4FEF2500C99C50 /* ViewSightViewController.swift */; };
 		729B27241C452167007BE28C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729B27231C452167007BE28C /* AppDelegate.swift */; };
 		729B27261C452167007BE28C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729B27251C452167007BE28C /* MainViewController.swift */; };
 		729B27291C452167007BE28C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 729B27271C452167007BE28C /* Main.storyboard */; };
@@ -72,8 +75,11 @@
 		72103A601C4574CB0074C82E /* AddSightViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSightViewController.swift; sourceTree = "<group>"; };
 		72103A661C463FCA0074C82E /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		72103A681C4916820074C82E /* SignIn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignIn.swift; sourceTree = "<group>"; };
+		7217F05E1C56BB6B00FC2AAB /* SightTableTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SightTableTableViewController.swift; sourceTree = "<group>"; };
+		7217F0601C57BD6B00FC2AAB /* SingleRowCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleRowCell.swift; sourceTree = "<group>"; };
+		7217F0621C580CB800FC2AAB /* AddSightByTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSightByTabViewController.swift; sourceTree = "<group>"; };
 		725050551C4BFD0300C99C50 /* Annotations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Annotations.swift; sourceTree = "<group>"; };
-		725050591C4CF2FF00C99C50 /* GetSights.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetSights.swift; sourceTree = "<group>"; };
+		7250505B1C4FEF2500C99C50 /* ViewSightViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewSightViewController.swift; sourceTree = "<group>"; };
 		729B27201C452167007BE28C /* TourGuide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TourGuide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		729B27231C452167007BE28C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		729B27251C452167007BE28C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -154,6 +160,9 @@
 				729B27511C4521CE007BE28C /* SignInViewController.swift */,
 				729B27531C4521E1007BE28C /* SignUpViewController.swift */,
 				72103A601C4574CB0074C82E /* AddSightViewController.swift */,
+				7250505B1C4FEF2500C99C50 /* ViewSightViewController.swift */,
+				7217F05E1C56BB6B00FC2AAB /* SightTableTableViewController.swift */,
+				7217F0621C580CB800FC2AAB /* AddSightByTabViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -166,7 +175,7 @@
 				72103A661C463FCA0074C82E /* Error.swift */,
 				72103A681C4916820074C82E /* SignIn.swift */,
 				725050551C4BFD0300C99C50 /* Annotations.swift */,
-				725050591C4CF2FF00C99C50 /* GetSights.swift */,
+				7217F0601C57BD6B00FC2AAB /* SingleRowCell.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -366,14 +375,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7217F05F1C56BB6B00FC2AAB /* SightTableTableViewController.swift in Sources */,
 				72103A671C463FCA0074C82E /* Error.swift in Sources */,
+				7250505C1C4FEF2500C99C50 /* ViewSightViewController.swift in Sources */,
 				72103A691C4916820074C82E /* SignIn.swift in Sources */,
 				725050561C4BFD0300C99C50 /* Annotations.swift in Sources */,
 				72103A611C4574CB0074C82E /* AddSightViewController.swift in Sources */,
+				7217F0631C580CB800FC2AAB /* AddSightByTabViewController.swift in Sources */,
 				729B27261C452167007BE28C /* MainViewController.swift in Sources */,
 				729B27241C452167007BE28C /* AppDelegate.swift in Sources */,
+				7217F0611C57BD6B00FC2AAB /* SingleRowCell.swift in Sources */,
 				729B27541C4521E1007BE28C /* SignUpViewController.swift in Sources */,
-				7250505A1C4CF2FF00C99C50 /* GetSights.swift in Sources */,
 				729B27521C4521CE007BE28C /* SignInViewController.swift in Sources */,
 				72103A5B1C454B0F0074C82E /* SignUp.swift in Sources */,
 				72103A5F1C455F8B0074C82E /* AddSight.swift in Sources */,

@@ -29,11 +29,9 @@ class SignIn {
         guard hasEmptyFields() else {
             throw Error.EmptyField
         }
-        
         guard checkUserCredentials() else {
             throw Error.IncorrectSignIn
         }
-        
     }
     // Check to make sure none of the text fields on our sign up view are empty
     func hasEmptyFields() -> Bool {
@@ -51,6 +49,4 @@ class SignIn {
         }
         return false
     }
-    
-    
 }

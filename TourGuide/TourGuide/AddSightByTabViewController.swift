@@ -1,8 +1,8 @@
 //
-//  AddSightViewController.swift
+//  AddSightByTabViewController.swift
 //  TourGuide
 //
-//  Created by Ewoud Hermans on 12/01/16.
+//  Created by Ewoud Hermans on 26/01/16.
 //  Copyright © 2016 Ewoud Hermans. All rights reserved.
 //
 
@@ -12,16 +12,18 @@ import MapKit
 import Parse
 import Bolts
 
-class AddSightViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+class AddSightByTabViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     @IBOutlet weak var sightTitle: UITextField!
-    @IBOutlet weak var sightInfo: UITextView!
+    @IBOutlet weak var sightInfo: UITextField!
     @IBOutlet weak var previewImage: UIImageView!
     
-    let userLocation = NSUserDefaults.standardUserDefaults()
+    let tabLocation = NSUserDefaults.standardUserDefaults()
     var latitude: CLLocationDegrees = 0.0
     var longitude: CLLocationDegrees = 0.0
+    var sightCity = ""
     var locationArray: [CLLocationDegrees] = [CLLocationDegrees]()
+
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [NSObject : AnyObject]?) {
         previewImage.image = image
@@ -35,9 +37,9 @@ class AddSightViewController: UIViewController, UIImagePickerControllerDelegate,
         imagePicker.allowsEditing = false
         self.presentViewController(imagePicker, animated: true, completion: nil)
     }
-  
+    
     @IBAction func submitSight(sender: AnyObject) {
-        let testArray: AnyObject? = userLocation.objectForKey("myLocation")
+        let testArray: AnyObject? = tabLocation.objectForKey("myTabLocation")
         let readArray: [CLLocationDegrees] = testArray! as! [CLLocationDegrees]
         
         latitude = readArray.last!
@@ -52,8 +54,8 @@ class AddSightViewController: UIViewController, UIImagePickerControllerDelegate,
                 self.presentViewController(alert, animated: true, completion: nil)
             }
         })
-        for key in userLocation.dictionaryRepresentation().keys {
-            userLocation.removeObjectForKey(key)
+        for key in tabLocation.dictionaryRepresentation().keys {
+            tabLocation.removeObjectForKey(key)
         }
     }
     
@@ -69,3 +71,4 @@ class AddSightViewController: UIViewController, UIImagePickerControllerDelegate,
         self.view.endEditing(true)
     }
 }
+

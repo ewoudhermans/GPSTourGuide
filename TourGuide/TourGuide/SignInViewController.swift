@@ -12,19 +12,15 @@ class SignInViewController: UIViewController {
 
     @IBOutlet weak var userName: UITextField!
     @IBOutlet weak var userPassword: UITextField!
-    
-    
-    
-    
-    
-    
-    
-    
+    @IBOutlet weak var signInButton: UIButton!
+    @IBOutlet weak var noUserButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        userName.opaque = true
         // Do any additional setup after loading the view.
+        signInButton.layer.cornerRadius = 8
+        noUserButton.layer.cornerRadius = 8
     }
 
     @IBAction func signInTouched(sender: AnyObject) {
@@ -49,15 +45,4 @@ class SignInViewController: UIViewController {
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
-    
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-
 }

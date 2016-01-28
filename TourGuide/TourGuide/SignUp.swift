@@ -33,7 +33,6 @@ class SignUp: NSObject {
         if firstName!.isEmpty && lastName!.isEmpty && userName!.isEmpty && userEmail!.isEmpty && userPassword!.isEmpty && confirmPassword!.isEmpty {
             throw Error.EmptyField
         }
-        
         let email = "[A-Z0-9a-z+-._%]+@[A-Za-z]+\\.[A-Za-z]{2-4}"
         let range = userEmail!.rangeOfString(email, options: .RegularExpressionSearch)
         let result = range != nil ? true : false
@@ -48,9 +47,7 @@ class SignUp: NSObject {
         
     }
     
-    
     func storeNewUser(completion:(result: PFUser?, succes: Bool) -> Void) {
-        
         
         let user = PFUser()
         
@@ -59,15 +56,6 @@ class SignUp: NSObject {
         user.username = userName!
         user.email = userEmail!
         user.password = userPassword!
-        
-//        user.signUpInBackgroundWithBlock {
-//            (var success: Bool, error: NSError?) -> Void in
-//            if error == nil {
-//                success = true
-//            } else {
-//                print ("error")
-//            }
-//        }
         
         user.signUpInBackgroundWithBlock({(success: Bool, error: NSError?) -> Void in
             if success {
