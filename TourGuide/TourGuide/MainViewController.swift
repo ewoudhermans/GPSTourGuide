@@ -27,6 +27,12 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     var locationManager: CLLocationManager!
     var latitude = 0.0
     var longitude = 0.0
+    var location:CLLocation! {
+        didSet {
+            latitude = location.coordinate.latitude
+            longitude = location.coordinate.longitude
+        }
+    }
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -35,17 +41,12 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         self.performSegueWithIdentifier("goSignIn", sender: self)
     }
     
+    // Centers the map on the users location
     @IBAction func updateLocation(sender: AnyObject) {
         self.centerMapOnLocation(self.location)
     }
     
-    var location:CLLocation! {
-        didSet {
-            latitude = location.coordinate.latitude
-            longitude = location.coordinate.longitude
-        }
-    }
-    
+
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.last
         findSight()
@@ -53,7 +54,6 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
             centerMapOnLocation(location)
             whenToUpdate = false
         }
-        
     }
     
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
@@ -66,8 +66,8 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         whenToUpdate = true
         
         let currentUser = PFUser.currentUser()
-        if currentUser != nil {
         
+        if currentUser != nil {
         } else {
             self.performSegueWithIdentifier("goSignIn", sender: self)
         }
@@ -78,17 +78,8 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
     }
     
-    func checkCoreLocationPermission() {
-        if CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse {
-            locationManager.startUpdatingLocation()
-        } else if CLLocationManager.authorizationStatus() == .NotDetermined {
-            locationManager.requestWhenInUseAuthorization()
-        } else if CLLocationManager.authorizationStatus() == .Restricted {
-            print("Give authorization please")
-        }
-    }
-
     let regionRadius: CLLocationDistance = 1000
+    // Centers the map on a given location
     func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
             regionRadius * 2.0, regionRadius * 2.0)
@@ -102,6 +93,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         userLocation.setObject(locationArray, forKey: "myLocation")
     }
     
+    // Checks if the to be added annotation already exists
     func containsAnnotation(annotation: MKAnnotation) -> Bool {
         
         if let existingAnnotations = self.annotations as? [MKAnnotation] {
@@ -118,12 +110,13 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         return false
     }
     
+    // Gets the rows from parse that have a location near the users geopoint
     func findSight() {
         
         let query = PFQuery(className:"AddedSight")
         userGeoPoint = PFGeoPoint(location: location)
-        //query.whereKey("Geopoints", nearGeoPoint: userGeoPoint)
-        query.limit = 50
+        query.whereKey("Geopoints", nearGeoPoint: userGeoPoint)
+        query.limit = 10
         
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
@@ -136,10 +129,12 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
                     let Longi = object["SightLatitude"] as! Double
                     let sightLocation = CLLocationCoordinate2DMake(Lati, Longi)
                     self.sighTitles.append(Title)
-                
-                    let currRegion = CLCircularRegion(center: sightLocation, radius: 10, identifier: Title)
+                    
+                    // Starts to check whether te user is in a radius of 20 meters of a sight documented in the parse database
+                    let currRegion = CLCircularRegion(center: sightLocation, radius: 100, identifier: Title)
                     self.locationManager.startMonitoringForRegion(currRegion)
                     
+                    // Adds an annotation to mapView of a sight from parse when it is not already shown on the mapview
                     let annotation = Annotation(title: Title, coordinate: sightLocation)
                     
                         if !self.containsAnnotation(annotation) {
@@ -154,6 +149,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
+    // Gives a notification and an alert when in the 20 meter radius of a sight
     func sightNotification(region: CLRegion) {
         let Title = region.identifier
         let query = PFQuery(className: "AddedSight")
@@ -190,6 +186,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
+    // When entering region
     func locationManager(manager: CLLocationManager, didEnterRegion region: CLRegion) {
         sightNotification(region)
         print (region.identifier)
@@ -197,8 +194,8 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         NSLog("enteringregion")
     }
     
+    // When exiting region
     func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
-        
         NSLog("exit")
     }
     
@@ -206,6 +203,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         NSLog("\(error)")
     }
     
+    // Go to tableview that shows all nearby sights
     @IBAction func goSightTableView(sender: AnyObject) {
         locationArray.removeAll()
         
@@ -214,19 +212,21 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         userLocation.setObject(locationArray, forKey: "myLocation")
     }
     
+    // Activated when user holds location on map by tab
     @IBAction func addAnnotation(sender: UILongPressGestureRecognizer) {
         let tabLocation = sender.locationInView(self.mapView)
         let tabCoordinates = self.mapView.convertPoint(tabLocation, toCoordinateFromView: self.mapView)
         let tabAnnotation = MKPointAnnotation()
         tabAnnotation.coordinate = tabCoordinates
-        //self.mapView.addAnnotation(tabAnnotation)
         
+        // Alert that check if user wants to add a sight on the location he was holding
         let alertController = UIAlertController(title: "Add new sight", message: "Are you sure you want to add a sight at this location?", preferredStyle: .Alert)
         let yesAction = UIAlertAction(title: "Add!", style: .Default) { (action) -> Void in
             
             self.locationArray.append(tabCoordinates.latitude)
             self.locationArray.append(tabCoordinates.longitude)
             self.tabLocation.setObject(self.locationArray, forKey: "myTabLocation")
+            // Shows the interface where you can describe the sight you want top add
             self.performSegueWithIdentifier("goAddTabSight", sender: self)
         }
         let noAction = UIAlertAction(title: "No thanks", style: .Cancel, handler: nil)

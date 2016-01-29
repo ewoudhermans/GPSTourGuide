@@ -24,6 +24,7 @@ class ViewSightViewController: UIViewController {
         let currentSightTitle = String(allSightInfo.objectForKey("sightTitle")!)
         sightTitle.text = currentSightTitle
         
+        // Gets the information of the sight that the user wants to see
         let query = PFQuery(className: "AddedSight")
         query.whereKey("SightTitle", equalTo: currentSightTitle)
         query.findObjectsInBackgroundWithBlock {
@@ -45,9 +46,6 @@ class ViewSightViewController: UIViewController {
                 print (error)
             }
         }
-    }
-    
-    @IBAction func goBack(sender: AnyObject) {
     }
     
 }

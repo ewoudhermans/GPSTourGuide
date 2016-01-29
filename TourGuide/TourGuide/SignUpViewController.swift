@@ -71,4 +71,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIAlertViewDe
         alertView.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         return alertView
     }
+    @IBAction func SignUpButton(sender: AnyObject) {
+        performSegueWithIdentifier("SignUpToSignIn", sender: self)
+    }
 }

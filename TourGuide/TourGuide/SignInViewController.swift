@@ -30,9 +30,9 @@ class SignInViewController: UIViewController {
             // call signIn model function SignInUser()
             // anything under this try will execute if signInUser returns true
             try signin.signInUser()
-            
+            performSegueWithIdentifier("mainView", sender: self)
             // dismiss view controller and go to MainViewController
-            self.dismissViewControllerAnimated(true, completion: nil)
+//            self.dismissViewControllerAnimated(true, completion: nil)
             
             // catches error thrown by SignInUser() if there is one
         } catch let error as Error {
@@ -42,6 +42,10 @@ class SignInViewController: UIViewController {
         }
     }
     
+    @IBAction func SignUp(sender: AnyObject) {
+        performSegueWithIdentifier("SignInToSignUp", sender: self)
+        
+    }
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.view.endEditing(true)
     }

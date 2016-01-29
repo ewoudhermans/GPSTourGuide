@@ -43,8 +43,6 @@ class SignUp: NSObject {
         if (userPassword! != confirmPassword!) {
             throw Error.PasswordsDoNotMatch
         }
-        
-        
     }
     
     func storeNewUser(completion:(result: PFUser?, succes: Bool) -> Void) {

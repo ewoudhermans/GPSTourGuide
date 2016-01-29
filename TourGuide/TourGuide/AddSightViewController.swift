@@ -37,6 +37,7 @@ class AddSightViewController: UIViewController, UIImagePickerControllerDelegate,
     }
   
     @IBAction func submitSight(sender: AnyObject) {
+        // Array with the location of the sight the user wants to add
         let testArray: AnyObject? = userLocation.objectForKey("myLocation")
         let readArray: [CLLocationDegrees] = testArray! as! [CLLocationDegrees]
         
