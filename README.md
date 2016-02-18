@@ -41,8 +41,8 @@ Parts of the application
 •	Interface that shows (in a table view) the ten closest sights.
 
 ![](FirstSketches/SignIn.JPG)
-![](doc/SignUp.JPG)
-![](doc/MapView.JPG)
-![](doc/AddSight.JPG)
-![](doc/Notification.JPG)
-![](doc/ClosestSights.JPG)
+![](FirstSketches/SignUp.JPG)
+![](FirstSketches/MapView.JPG)
+![](FirstSketches/AddSight.JPG)
+![](FirstSketches/Notification.JPG)
+![](FirstSketches/ClosestSights.JPG)
