@@ -1,4 +1,4 @@
-# GPSTourGuide
+# TourGuide
 
 Ewoud Hermans
 
@@ -39,6 +39,16 @@ Parts of the application
 •	Notification interface (where you read the information about the sights and have the possibility to read that piece of information).
 •	Interface where you add a new sight to the database.
 •	Interface that shows (in a table view) the ten closest sights.
+
+
+
+
+
+
+
+
+
+
 
 ![](FirstSketches/SignIn.JPG)
 ![](FirstSketches/SignUp.JPG)
