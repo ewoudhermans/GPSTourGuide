@@ -1,4 +1,4 @@
-# TourGuide
+#TourGuide - Proposal
 
 Ewoud Hermans
 
